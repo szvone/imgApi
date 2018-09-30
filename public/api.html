@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>超简图床</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="cover.css" rel="stylesheet">
+
+</head>
+
+<body style="overflow: hidden;">
+<div style="position: absolute;top: 0;left: 0;right: 0;bottom: 0; z-index: 99;">
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">超简图床</h3>
+                        <nav>
+                            <ul class="nav masthead-nav">
+                                <li><a href="index.html">主页</a></li>
+                                <li><a href="setting.html">系统设置</a></li>
+                                <li class="active"><a href="api.html">Api接口</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="inner cover">
+                    <!--
+                    <h1 class="cover-heading">Api接口</h1>
+                    <p class="lead">
+                    <form >
+                        <div class="form-group">
+                            <label class="sr-only" for="ApiUrl">请求地址</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">请求地址</div>
+                                <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/api">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="Post">请求方式</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">请求方式</div>
+                                <input type="text" class="form-control" id="Post" readonly value="Post">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="PostData">请求参数</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">请求参数</div>
+                                <input type="text" class="form-control" id="PostData" readonly value="key=后台设置的通讯密钥&imgBase64=图片的Base64编码">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="reData">返回内容</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">返回内容</div>
+                                <input type="text" class="form-control" id="reData" readonly value='{"code":1,"msg":"上传成功","imgUrl":"http://img03.sogoucdn.com/app/a/100520146/5CD236953E1FEEA8888D92D93A380CB3"}'>
+                            </div>
+                        </div>
+                    </form>
+                    </p>
+                    -->
+                    <h1 class="cover-heading">Api接口</h1>
+                    <p class="lead">
+                    <form >
+                        <div class="form-group">
+                            <label class="sr-only" for="doApiUrl">请求地址</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">请求地址</div>
+                                <input type="text" class="form-control" id="doApiUrl" readonly value="http://localhost/api">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="doPost">请求方式</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">请求方式</div>
+                                <input type="text" class="form-control" id="doPost" readonly value="Post">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="key">通讯密钥</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">通讯密钥</div>
+                                <input type="text" class="form-control" id="key" placeholder="请输入后台设置的通讯密钥">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="key">选择图片</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">选择图片</div>
+                                <input type="file" class="form-control" onchange="getBase64()" id="imgfile" value="后台设置的通讯密钥">
+                            </div>
+                        </div>
+                        <br>
+                    <button type="button" class="btn btn-lg btn-default" onclick="doTest()">上传测试</button>
+
+                    <button type="button" class="btn btn-lg btn-default"  data-toggle="modal" data-target=".bs-example-modal-lg2">Api文档</button>
+                    </form>
+                    </p>
+                </div>
+
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>本网站由超简图床程序提供服务, Copyright © 2018 <a href="http:/szvone.cn">Vone</a></p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="bj" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;"></div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="color: black;">Api测试</h4>
+            </div>
+            <div class="modal-body">
+                <textarea rows="25" style="width: 100%;height: 100%;color: black;" id="outPut"></textarea>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="color: black;">Api文档</h4>
+            </div>
+            <div class="modal-body">
+                <form >
+                    <div class="form-group">
+                        <label class="sr-only" for="ApiUrl">请求地址</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">请求地址</div>
+                            <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/api">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="Post">请求方式</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">请求方式</div>
+                            <input type="text" class="form-control" id="Post" readonly value="Post">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="PostData">请求参数</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">请求参数</div>
+                            <input type="text" class="form-control" id="PostData" readonly value="key=后台设置的通讯密钥&imgBase64=图片的Base64编码">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="reData">返回内容</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">返回内容</div>
+                            <input type="text" class="form-control" id="reData" readonly value='{"code":1,"msg":"上传成功","img":"http://img03.sogoucdn.com/app/a/100520146/5CD236953E1FEEA8888D92D93A380CB3"}'>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="reData">返回说明</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">返回说明</div>
+                            <input type="text" class="form-control" id="reDataCode" readonly value='code返回（1 代表成功，0 代表失败），msg返回具体结果，img返回图片地址'>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="particles.js"></script>
+
+<script>
+
+    particlesJS('bj',
+
+        {
+            "particles": {
+                "number": {
+                    "value": 50,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true,
+            "config_demo": {
+                "hide_card": false,
+                "background_color": "#b61924",
+                "background_image": "",
+                "background_position": "50% 50%",
+                "background_repeat": "no-repeat",
+                "background_size": "cover"
+            }
+        }
+    );
+
+</script>
+
+<script>
+    var url = window.location.href.replace(/api.html/,"api");
+
+    $("#doApiUrl").val(url);
+
+    $("#ApiUrl").val(url);
+
+    var baseData = "";
+
+    function getBase64() {
+        var file = document.getElementById('imgfile').files[0];
+        if(!/image\/\w+/.test(file.type)){
+            alert("文件类型错误，必须为图片！");
+            return false;
+        }
+        r = new FileReader();
+        r.onload = function(){
+            baseData = r.result;
+        }
+        r.readAsDataURL(file);    //Base64
+    }
+
+    function doTest() {
+        if (baseData == ""){
+            alert("请选择图片！");
+            return;
+        }
+        var key = $("#key").val();
+
+        if (key == ""){
+            alert("请输入通讯密钥！");
+            return;
+        }
+
+        $("#outPut").val("");
+
+        $('.bs-example-modal-lg').modal('show');
+
+        $("#outPut").val($("#outPut").val()+"开始测试Api接口...\n");
+        $("#outPut").val($("#outPut").val()+"请求接口："+url+"\n");
+
+        $("#outPut").val($("#outPut").val()+"通讯密钥："+key+"\n\n");
+
+        $("#outPut").val($("#outPut").val()+"读入图片成功，转换成Base64编码(此处为前50位,后面的省略)：\n");
+        $("#outPut").val($("#outPut").val()+baseData.substr(0,50)+"\n\n");
+
+
+        var tmp = baseData.split(",");
+        $("#outPut").val($("#outPut").val()+"剔除格式信息后进行utf8编码(此处为前50位,后面的省略)：\n"+encodeURIComponent(tmp[1]).substr(0,50)+"\n\n");
+
+        $("#outPut").val($("#outPut").val()+"组合后Post参数(imgBase64为前50位,后面的省略)：\n");
+
+        $("#outPut").val($("#outPut").val()+"key="+key+"&imgBase64="+encodeURIComponent(tmp[1]).substr(0,50)+"\n\n");
+
+
+        $("#outPut").val($("#outPut").val()+"发起Post请求...\n");
+
+        $("#outPut").val($("#outPut").val()+"请求返回：\n");
+
+        $.post(url,"key="+key+"&imgBase64="+encodeURIComponent(tmp[1]),function (data) {
+            $("#outPut").val($("#outPut").val()+JSON.stringify(data)+"\n");
+            $("#outPut").val($("#outPut").val()+"返回错误代码为："+data.code+"（1为成功，2为失败）\n");
+            $("#outPut").val($("#outPut").val()+"返回接口信息为："+data.msg+"（接口调用的详细信息）\n");
+            $("#outPut").val($("#outPut").val()+"返回图片链接为："+data.img+"（成功返回图片链接，失败返回null）\n");
+        });
+
+    }
+</script>
+</body>
+</html>

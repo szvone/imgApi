@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>超简图床</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="cover.css" rel="stylesheet">
+
+</head>
+
+<body style="overflow: hidden;">
+<div style="position: absolute;top: 0;left: 0;right: 0;bottom: 0; z-index: 99999;">
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">超简图床</h3>
+                        <nav>
+                            <ul class="nav masthead-nav">
+                                <li><a href="index.html">主页</a></li>
+                                <li class="active"><a href="setting.html">系统设置</a></li>
+                                <li><a href="api.html">Api接口</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="inner cover">
+                    <h1 class="cover-heading">系统配置</h1>
+                    <p class="lead">
+
+                    <form >
+                        <div class="form-group">
+                            <label class="sr-only" for="sinaUser">运行模式</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">运行模式</div>
+                                <select class="form-control" id="type">
+                                    <option value="1">搜狗CDN（无需配置，默认模式）</option>
+                                    <option value="2">新浪CDN（需要账号，推荐使用）</option>
+                                    <option value="3">本地存储（占用空间，保证安全）</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="sinaUser">新浪账号</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">新浪账号</div>
+                                <input type="text" class="form-control" id="SinaUser" placeholder="新浪账号">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="sinaPass">新浪密码</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">新浪密码</div>
+                                <input type="text" class="form-control" id="SinaPass" placeholder="新浪密码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="sinaPass">通讯密钥</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">通讯密钥</div>
+                                <input type="text" class="form-control" id="key" placeholder="调用Api时使用的通讯密钥">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="sinaPass">管理密码</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">管理密码</div>
+                                <input type="text" class="form-control" id="admin" placeholder="修改配置使用的管理员密码">
+                            </div>
+                        </div>
+                        <br><br>
+                        <button type="button" class="btn btn-lg btn-default" onclick="saveConfig()">保存配置</button>
+
+                        <button type="button" class="btn btn-lg btn-default" onclick="loginOut()">退出登录</button>
+                    </form>
+                    </p>
+                </div>
+
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>本网站由超简图床程序提供服务, Copyright © 2018 <a href="http:/szvone.cn">Vone</a></p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="bj" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;"></div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    function getConfig(){
+        $.post("index/index/getConfig",function (data) {
+            if (data.code == 1){
+                $("#type").val(data.data.type);
+                $("#SinaUser").val(data.data.SinaUser);
+                $("#SinaPass").val(data.data.SinaPass);
+                $("#admin").val(data.data.admin);
+                $("#key").val(data.data.key);
+            } else{
+                dologin();
+            }
+
+        });
+    }
+
+    function dologin() {
+        var pass = prompt("请输入管理员密码");
+        if (pass==""){
+            window.location.href = "index.html";
+            return;
+        }
+        $.post("index/index/login","pass="+pass,function (data) {
+            if (data.code == 1){
+                alert(data.msg);
+                getConfig();
+            } else{
+                alert(data.msg);
+                dologin();
+            }
+        });
+    }
+
+    function saveConfig() {
+        var data = "type="+$("#type").val()
+            +"&SinaUser="+$("#SinaUser").val()+"&SinaPass="+$("#SinaPass").val()+"&admin="+$("#admin").val()+"&key="+$("#key").val();
+        $.post("index/index/setConfig",data,function (data) {
+            alert(data.msg);
+        })
+    }
+
+    function loginOut(){
+        $.post("index/index/loginOut",function (data) {
+            alert(data.msg);
+            window.location.href = "index.html";
+        });
+    }
+
+    getConfig();
+</script>
+
+<script src="particles.js"></script>
+
+<script>
+
+    particlesJS('bj',
+
+        {
+            "particles": {
+                "number": {
+                    "value": 50,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true,
+            "config_demo": {
+                "hide_card": false,
+                "background_color": "#b61924",
+                "background_image": "",
+                "background_position": "50% 50%",
+                "background_repeat": "no-repeat",
+                "background_size": "cover"
+            }
+        }
+    );
+
+</script>
+
+</body>
+</html>
