@@ -56,6 +56,9 @@ class Index
     }
 
     public function getConfig(){
+        if (!Cache::has("admin")){
+            Cache::set("admin","123456");
+        }
         if (Session::has("admin")){
             return json(array("code"=>1,"msg"=>"拉取成功","data"=>array(
                 "SinaUser"=>Cache::get("SinaUser"),
