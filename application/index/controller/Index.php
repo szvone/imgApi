@@ -24,7 +24,6 @@ class Index
             Cache::set("admin","123456");
             Cache::set("SinaUser","");
             Cache::set("SinaPass","");
-            Cache::set("admin","");
             Cache::set("key","123456");
             Cache::set("type","1");
         }
@@ -69,7 +68,6 @@ class Index
             Cache::set("admin","123456");
             Cache::set("SinaUser","");
             Cache::set("SinaPass","");
-            Cache::set("admin","");
             Cache::set("key","123456");
             Cache::set("type","1");
         }
