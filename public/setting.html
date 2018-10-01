@@ -130,7 +130,7 @@
 
     function dologin() {
         var pass = prompt("请输入管理员密码");
-        if (pass==""){
+        if (pass=="" || pass == null){
             window.location.href = "index.html";
             return;
         }
