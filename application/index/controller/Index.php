@@ -20,6 +20,15 @@ class Index
         // 指定允许其他域名访问
         header("Access-Control-Allow-Origin: *");
 
+        if (!Cache::has("admin")){
+            Cache::set("admin","123456");
+            Cache::set("SinaUser","");
+            Cache::set("SinaPass","");
+            Cache::set("admin","");
+            Cache::set("key","123456");
+            Cache::set("type","1");
+        }
+
         $key = Cache::get("key");
         if ($key!=input("key")){
             return json(array("code"=>"-1","msg"=>"通讯密钥错误","img"=>null));
@@ -27,12 +36,12 @@ class Index
 
         $type = Cache::get("type");
         if ($type == 1){
-            //使用新浪图床
-            $res = SinaApi::Upload();
-            return json($res);
-        }else if ($type == 2){
             //使用搜狗图床
             $res = SougouApi::Upload();
+            return json($res);
+        }else if ($type == 2){
+            //使用新浪图床
+            $res = SinaApi::Upload();
             return json($res);
         }else{
             return json(array("code"=>"-1","msg"=>"类型错误","img"=>null));
@@ -58,6 +67,11 @@ class Index
     public function getConfig(){
         if (!Cache::has("admin")){
             Cache::set("admin","123456");
+            Cache::set("SinaUser","");
+            Cache::set("SinaPass","");
+            Cache::set("admin","");
+            Cache::set("key","123456");
+            Cache::set("type","1");
         }
         if (Session::has("admin")){
             return json(array("code"=>1,"msg"=>"拉取成功","data"=>array(
