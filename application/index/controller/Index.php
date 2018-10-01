@@ -42,6 +42,10 @@ class Index
             //使用新浪图床
             $res = SinaApi::Upload();
             return json($res);
+        }else if ($type == 3){
+            //使用新浪图床
+            $res = $this->upload();
+            return json($res);
         }else{
             return json(array("code"=>"-1","msg"=>"类型错误","img"=>null));
         }
@@ -104,14 +108,37 @@ class Index
 
 
         // 获取表单上传文件 例如上传了001.jpg
-        $file = request()->file('file');
-        $info = $file->validate(['size'=>2555678,'ext'=>'jpg,png,gif'])->move(ROOT_PATH . 'public' . DS . 'uploads');
-        // 移动到框架应用根目录/public/uploads/ 目录下
-        if($file){
-            return json(array("code"=>"1","msg"=>"上传成功","img"=>$info->getSaveName()));
-        }else{
-            return json(array("code"=>"-1","msg"=>"类型错误:"+getError(),"img"=>null));
+        $new_file = "/uploads/".date('Ymd',time())."/";
+
+
+        if(!file_exists(ROOT_PATH.$new_file)){
+            mkdir(ROOT_PATH.$new_file, 0777,true);
         }
+
+        $hz = substr(input("imgBase64"),0,2);
+
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $imgurl = $http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+
+        if ($hz == "iV"){
+            $type = "png";
+        }else if($hz == "/9"){
+            $type = "jpg";
+        }else{
+            return array("code"=>"-1","msg"=>"图片格式错误","img"=>null);
+        }
+
+
+
+        $new_file = $new_file.time().".{$type}";
+        if (file_put_contents(ROOT_PATH.$new_file, base64_decode(input("imgBase64")))){
+
+            return array("code"=>"1","msg"=>"上传成功","img"=>str_replace("/api",$new_file,$imgurl));
+        }else{
+            return array("code"=>"-1","msg"=>"上传失败","img"=>null);
+        }
+
     }
 
 }
