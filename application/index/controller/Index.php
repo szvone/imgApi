@@ -11,7 +11,7 @@ class Index
 {
     public function index()
     {
-        return '超简图床 -- 为您提供Api服务！';
+        return '超简图床 -- 为您提供Api服务！（您看到此页面说明您的服务器默认配置的首页为index.php,请您访问localhost/public/index.html进入项目主页）';
     }
 
 
