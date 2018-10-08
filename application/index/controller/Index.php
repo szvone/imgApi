@@ -11,7 +11,7 @@ class Index
 {
     public function index()
     {
-        return '超简图床 -- 为您提供Api服务！（您看到此页面说明您的服务器默认配置的首页为index.php,请您访问localhost/public/index.html进入项目主页）';
+        return '<script>window.location.href="index.html";</script>';
     }
 
 
@@ -37,17 +37,19 @@ class Index
         if ($type == 1){
             //使用搜狗图床
             $res = SougouApi::Upload();
-            return json($res);
         }else if ($type == 2){
             //使用新浪图床
             $res = SinaApi::Upload();
-            return json($res);
         }else if ($type == 3){
             //使用新浪图床
             $res = $this->upload();
-            return json($res);
         }else{
-            return json(array("code"=>"-1","msg"=>"类型错误","img"=>null));
+            $res = array("code"=>"-1","msg"=>"类型错误","img"=>null);
+        }
+        if (input("onlyUrl")==1){
+            return $res['img'];
+        }else{
+            return json($res);
         }
 
 

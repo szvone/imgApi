@@ -174,7 +174,14 @@
                         <label class="sr-only" for="PostData">请求参数</label>
                         <div class="input-group">
                             <div class="input-group-addon">请求参数</div>
-                            <input type="text" class="form-control" id="PostData" readonly value="key=后台设置的通讯密钥&imgBase64=图片的Base64编码">
+                            <input type="text" class="form-control" id="PostData" readonly value="key=后台设置的通讯密钥&onlyUrl=0&imgBase64=图片的Base64编码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="PostData">参数说明</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">参数说明</div>
+                            <input type="text" class="form-control" id="PostDataInfo" readonly value="key=后台设置的通讯密钥,onlyUrl=(传入1为只返回图片网址,其他不返回,否则为返回详细json数据),imgBase64=图片的Base64编码">
                         </div>
                     </div>
 
@@ -391,14 +398,23 @@
 
         $("#outPut").val($("#outPut").val()+"发起Post请求...\n");
 
-        $("#outPut").val($("#outPut").val()+"请求返回：\n");
+
 
         $.post(url,"key="+key+"&imgBase64="+encodeURIComponent(tmp[1]),function (data) {
+            $("#outPut").val($("#outPut").val()+"请求返回：\n");
             $("#outPut").val($("#outPut").val()+JSON.stringify(data)+"\n");
             $("#outPut").val($("#outPut").val()+"返回错误代码为："+data.code+"（1为成功，2为失败）\n");
             $("#outPut").val($("#outPut").val()+"返回接口信息为："+data.msg+"（接口调用的详细信息）\n");
             $("#outPut").val($("#outPut").val()+"返回图片链接为："+data.img+"（成功返回图片链接，失败返回null）\n");
+
+            $("#outPut").val($("#outPut").val()+"若配置onlyUrl为1，则请求返回(仅有img字段，成功返回图片链接，失败返回null)：\n");
+            $("#outPut").val($("#outPut").val()+data.img+"\n");
+
         });
+
+
+
+
 
     }
 </script>

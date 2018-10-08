@@ -114,7 +114,7 @@
 <script src="https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
     function getConfig(){
-        $.post("index/index/getConfig",function (data) {
+        $.post("index.php/index/index/getConfig",function (data) {
             if (data.code == 1){
                 $("#type").val(data.data.type);
                 $("#SinaUser").val(data.data.SinaUser);
@@ -134,7 +134,7 @@
             window.location.href = "index.html";
             return;
         }
-        $.post("index/index/login","pass="+pass,function (data) {
+        $.post("index.php/index/index/login","pass="+pass,function (data) {
             if (data.code == 1){
                 alert(data.msg);
                 getConfig();
@@ -148,13 +148,13 @@
     function saveConfig() {
         var data = "type="+$("#type").val()
             +"&SinaUser="+$("#SinaUser").val()+"&SinaPass="+$("#SinaPass").val()+"&admin="+$("#admin").val()+"&key="+$("#key").val();
-        $.post("index/index/setConfig",data,function (data) {
+        $.post("index.php/index/index/setConfig",data,function (data) {
             alert(data.msg);
         })
     }
 
     function loginOut(){
-        $.post("index/index/loginOut",function (data) {
+        $.post("index.php/index/index/loginOut",function (data) {
             alert(data.msg);
             window.location.href = "index.html";
         });
