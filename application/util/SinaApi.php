@@ -23,6 +23,15 @@ class SinaApi{
             self::sinaLogin(Cache::get("SinaUser"),Cache::get("SinaPass"));
         }
 
+        if (!Cache::get("SinaUpdateTime")){
+            Cache::set("SinaUpdateTime",time());
+        }
+        $UpdateTime = time() - Cache::get("SinaUpdateTime");
+        //1小时自动更新一次cookie
+        if($UpdateTime > 3600){
+            self::sinaLogin(Cache::get("SinaUser"),Cache::get("SinaPass"));
+        }
+
         // Curl提交
         $ch = curl_init($url);
         curl_setopt_array($ch, array(

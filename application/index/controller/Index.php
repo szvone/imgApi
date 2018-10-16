@@ -26,6 +26,7 @@ class Index
             Cache::set("SinaPass","");
             Cache::set("key","123456");
             Cache::set("type","1");
+            Cache::set("SinaUpdateTime",time());
         }
 
         $key = Cache::get("key");
