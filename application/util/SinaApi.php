@@ -17,7 +17,7 @@ class SinaApi{
 
         $url = 'http://picupload.service.weibo.com/interface/pic_upload.php'
             .'?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog';
-        $post['b64_data'] = input("imgBase64");
+        $post['b64_data'] = urlencode(input("imgBase64"));
 
         if(!Cache::get("SinaCookie")){
             self::sinaLogin(Cache::get("SinaUser"),Cache::get("SinaPass"));
