@@ -18,7 +18,7 @@
 
 > 超简Api图床的运行环境要求PHP5.6以上。
 
-> 超简图床Java版本已经发布，欢迎使用【https://github.com/szvone/imgApiJava】
+> 超简图床Java版本已经发布，欢迎使用【 https://github.com/szvone/imgApiJava 】
 
 ## 安装
 
