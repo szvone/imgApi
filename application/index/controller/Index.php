@@ -25,7 +25,7 @@ class Index
             Cache::set("SinaUser","");
             Cache::set("SinaPass","");
             Cache::set("key","123456");
-            Cache::set("type","1");
+            Cache::set("type","3");
             Cache::set("SinaUpdateTime",time());
         }
 
@@ -36,8 +36,11 @@ class Index
 
         $type = Cache::get("type");
         if ($type == 1){
+
             //使用搜狗图床
-            $res = SougouApi::Upload();
+            //$res = SougouApi::Upload();
+            $res = array("code"=>"-1","msg"=>"搜狗图床已经失效，请使用其他图床","img"=>null);
+
         }else if ($type == 2){
             //使用新浪图床
             $res = SinaApi::Upload();

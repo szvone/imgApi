@@ -15,9 +15,12 @@ class SinaApi{
 
     public static function Upload() {
 
-        $url = 'http://picupload.service.weibo.com/interface/pic_upload.php'
-            .'?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog';
-        $post['b64_data'] = urlencode(input("imgBase64"));
+        $url = "http://picupload.weibo.com/interface/pic_upload.php?cb=https%3A%2F%2Fweibo.com%2Faj%2Fstatic%2Fupimgback.html%3F_wv%3D5%26callback%3DSTK_ijax_1551096206285100&mime=image%2Fjpeg&data=base64&url=weibo.com%2Fu%2F5734329255&markpos=1&logo=1&nick=&marks=0&app=miniblog&s=rdxt&pri=0&file_source=2";
+
+
+        $post='b64_data='.urlencode(input("imgBase64"));
+
+
 
         if(!Cache::get("SinaCookie")){
             self::sinaLogin(Cache::get("SinaUser"),Cache::get("SinaPass"));
@@ -34,6 +37,9 @@ class SinaApi{
 
         // Curl提交
         $ch = curl_init($url);
+
+
+        curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt_array($ch, array(
             CURLOPT_POST => true,
             CURLOPT_VERBOSE => true,
@@ -43,42 +49,42 @@ class SinaApi{
         ));
         $output = curl_exec($ch);
         curl_close($ch);
-        // 正则表达式提取返回结果中的json数据
-        preg_match('/({.*)/i', $output, $match);
-        if(!isset($match[1])) {
+
+
+
+        $pid = self::getSubstr($output,"pid=","\r");
+
+
+
+
+        if($pid=="") {
             return array("code"=>"-1","msg"=>"服务器繁忙","img"=>null);
         }
-        $str = json_decode($match[1],true);
-        if (!isset($str['data']['pics']['pic_1']['pid'])) {
-            return array("code"=>"-1","msg"=>"上传失败，稍候再试，错误代码：".$str['code'],"img"=>null);
+        $size = 0;      //图片尺寸 0-7(数字越大尺寸越大)
+        $https = true;  //是否使用 https 协议
+        $sizeArr = array('large', 'mw1024', 'mw690', 'bmiddle', 'small', 'thumb180', 'thumbnail', 'square');
+        $pid = trim($pid);
+        $size = $sizeArr[$size];
+
+        if (preg_match('/^[a-zA-Z0-9]{32}$/', $pid) === 1) {
+            $imgUrl =  ($https ? 'https' : 'http') . '://' . ($https ? 'ws' : 'ww')
+                . ((crc32($pid) & 3) + 1) . ".sinaimg.cn/" . $size
+                . "/$pid." . ($pid[21] === 'g' ? 'gif' : 'jpg');
         }else{
-            $pid = $str['data']['pics']['pic_1']['pid'];
-            $size = 0;      //图片尺寸 0-7(数字越大尺寸越大)
-            $https = true;  //是否使用 https 协议
-            $sizeArr = array('large', 'mw1024', 'mw690', 'bmiddle', 'small', 'thumb180', 'thumbnail', 'square');
-            $pid = trim($pid);
-            $size = $sizeArr[$size];
-
-            if (preg_match('/^[a-zA-Z0-9]{32}$/', $pid) === 1) {
-                $imgUrl =  ($https ? 'https' : 'http') . '://' . ($https ? 'ws' : 'ww')
-                    . ((crc32($pid) & 3) + 1) . ".sinaimg.cn/" . $size
-                    . "/$pid." . ($pid[21] === 'g' ? 'gif' : 'jpg');
-            }else{
-                $url = $pid;
-                $imgUrl = preg_replace_callback('/^(https?:\/\/[a-z]{2}\d\.sinaimg\.cn\/)'
-                    . '(large|bmiddle|mw1024|mw690|small|square|thumb180|thumbnail)'
-                    . '(\/[a-z0-9]{32}\.(jpg|gif))$/i', function ($match) use ($size) {
-                    return $match[1] . $size . $match[3];
-                }, $url, -1, $count);
-                if ($count === 0) {
-                    $imgUrl = '';
-                }
+            $url = $pid;
+            $imgUrl = preg_replace_callback('/^(https?:\/\/[a-z]{2}\d\.sinaimg\.cn\/)'
+                . '(large|bmiddle|mw1024|mw690|small|square|thumb180|thumbnail)'
+                . '(\/[a-z0-9]{32}\.(jpg|gif))$/i', function ($match) use ($size) {
+                return $match[1] . $size . $match[3];
+            }, $url, -1, $count);
+            if ($count === 0) {
+                $imgUrl = '';
             }
-
-            return array("code"=>"1","msg"=>"上传成功","img"=>$imgUrl);
         }
-    }
 
+        return array("code"=>"1","msg"=>"上传成功","img"=>$imgUrl);
+
+    }
 
 
     public static function sinaLogin($u,$p){
