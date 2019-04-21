@@ -29,13 +29,17 @@
  + 默认通讯密钥为：123456
  + 保存配置后，即可开始使用
 
- > 如果登陆提示成功后还是一直弹出登陆，请修改php.ini 里面的 always_populate_raw_post_data = -1  （去掉前面的;）
+ > 如果登录提示成功后还是一直弹出登录，请修改php.ini 里面的 always_populate_raw_post_data = -1  （去掉前面的;）
  
  > 升级说明：请您直接下载新版本覆盖旧版本即可！
  
  > 如果页面显示【超简图床 -- 为您提供Api服务！】，说明您的服务器默认配置的首页为index.php,请您访问localhost/public/index.html进入主页
 
- > 官方推荐环境：宝塔面板，Nginx服务器，PHP5.6，使用宝塔面板配置伪静态
+ > 官方推荐环境：宝塔面板，Nginx服务器，PHP5.6，使用宝塔面板配置伪静态，伪静态规则：
+
+ > if (!-e $request_filename){
+      rewrite  ^/public/index.php/(.*)$  /public/index.php?s=$1  last;   break;
+   }
 ## 使用
 
  + 根据主页显示的Api接口，调用Api接口，将会返回对应的图片地址
@@ -44,11 +48,11 @@
  > 如果您忘记密码，请您删除runtime下面的cache目录下面的所有文件夹，即可重置配置 
 
 ## Api接口说明
- + 请求地址：http://localhost/api  (localhost请自行替换成您的域名)
+ + 请求地址：http://localhost/public/index.php/api  (localhost请自行替换成您的域名)
  + 请求方式：POST
  + 请求参数：
    + key=通讯密钥  （后台设置的通讯密钥，默认为123456）
-   + imgBase64=需要上传图片的base64编码（请对该字段使用urlencode编码）
+   + imgBase64=需要上传图片的base64编码（请对该字段使用urlencode编码），不需要携带base64标准前缀
    + onlyUrl=0 （传入1则调用接口只会返回图片地址，传入其他或者不传会返回完整的json数据）
    
  + 返回数据：

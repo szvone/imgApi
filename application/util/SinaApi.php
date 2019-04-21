@@ -9,7 +9,7 @@ use think\facade\Cache;
  * Time: 22:10
  */
 
-//新浪图床API，需要登陆授权
+//新浪图床API，需要登录授权
 class SinaApi{
 
 
@@ -33,6 +33,7 @@ class SinaApi{
         //1小时自动更新一次cookie
         if($UpdateTime > 3600){
             self::sinaLogin(Cache::get("SinaUser"),Cache::get("SinaPass"));
+            Cache::set("SinaUpdateTime",time()); // 更新之后时间重置，不然会一直触发。。
         }
 
         // Curl提交
@@ -104,9 +105,9 @@ class SinaApi{
         if ($res->retcode=="0"){
             $cookie = 'SUB' . self::getSubstr($tmp[0],"Set-Cookie: SUB",'; ') . ';';
             Cache::set("SinaCookie",$cookie);
-            return "登陆成功";
+            return "登录成功";
         }else{
-            return "登陆失败";
+            return "登录失败";
         }
 
 

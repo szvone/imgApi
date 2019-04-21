@@ -9,7 +9,7 @@ namespace app\util;
  * Time: 21:32
  */
 
-//搜狗图床API，免登陆
+//搜狗图床API，免登录
 class SougouApi{
 
 

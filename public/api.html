@@ -49,7 +49,7 @@
                             <label class="sr-only" for="ApiUrl">请求地址</label>
                             <div class="input-group">
                                 <div class="input-group-addon">请求地址</div>
-                                <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/api">
+                                <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/public/index.php/api">
                             </div>
                         </div>
                         <div class="form-group">
@@ -84,7 +84,7 @@
                             <label class="sr-only" for="doApiUrl">请求地址</label>
                             <div class="input-group">
                                 <div class="input-group-addon">请求地址</div>
-                                <input type="text" class="form-control" id="doApiUrl" readonly value="http://localhost/api">
+                                <input type="text" class="form-control" id="doApiUrl" readonly value="http://localhost/public/index.php/api">
                             </div>
                         </div>
                         <div class="form-group">
@@ -160,7 +160,7 @@
                         <label class="sr-only" for="ApiUrl">请求地址</label>
                         <div class="input-group">
                             <div class="input-group-addon">请求地址</div>
-                            <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/api">
+                            <input type="text" class="form-control" id="ApiUrl" readonly value="http://localhost/public/index.php/api">
                         </div>
                     </div>
                     <div class="form-group">
@@ -342,7 +342,7 @@
 </script>
 
 <script>
-    var url = window.location.href.replace(/api.html/,"api");
+    var url = window.location.href.replace("/public/api.html","/public/index.php/api");
 
     $("#doApiUrl").val(url);
 
@@ -398,8 +398,6 @@
 
         $("#outPut").val($("#outPut").val()+"发起Post请求...\n");
 
-
-
         $.post(url,"key="+key+"&imgBase64="+encodeURIComponent(tmp[1]),function (data) {
             $("#outPut").val($("#outPut").val()+"请求返回：\n");
             $("#outPut").val($("#outPut").val()+JSON.stringify(data)+"\n");
@@ -411,11 +409,6 @@
             $("#outPut").val($("#outPut").val()+data.img+"\n");
 
         });
-
-
-
-
-
     }
 </script>
 </body>
